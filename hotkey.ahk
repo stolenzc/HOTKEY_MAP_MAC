@@ -1,3 +1,4 @@
+; # -> Windows
 ; ^ -> Ctrl
 ; ! -> Alt
 ; + -> Shift
@@ -44,12 +45,12 @@ If ErrorLevel {
 Return
 
 ; -------------------- 多桌面切换 --------------------
-~^Left::Send ^#{Left}
-~^Right::Send ^#{Right}
+; ~^Left::Send ^#{Left}
+; ~^Right::Send ^#{Right}
 ; 使用ctrl + win + t 新建桌面
 ; 使用ctrl + win + w 删除桌面
-~^#t::Send ^#d
-~^#w::Send ^#{F4}
+; ~^#t::Send ^#d
+; ~^#w::Send ^#{F4}
 
 ; --------------------- Windows terminal拷贝粘贴-------------------------
 #If WinActive("ahk_exe " "WindowsTerminal.exe")
@@ -63,17 +64,49 @@ Return
   ~!v::Send ^v
 #if
 
+; -------------------- Windows Terminal 全局换出 -------------------------
+
+; ~Ctrl::
+;   if (A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 400)
+;     {
+;       Send #``
+;     }
+; return
+
 
 ; ----------------------Vscode切换标签页---------------------------
 #If WinActive("ahk_exe " "Code.exe")
-  ~#!Left::Send ^{PgUp}
-  ~#!Right::Send ^{PgDn}
+  $#!Left::Send ^{PgUp}
+  $#!Right::Send ^{PgDn}
+  $!+[::Send ^{PgUp}
+  $!+]::Send ^{PgDn}
 #if
 
 #If not WinActive("ahk_exe " "Code.exe")
-  ~!#Left::Send ^+{Tab}
-  ~!#Right::Send ^{Tab}
+  $!#Left::Send ^+{Tab}
+  $!#Right::Send ^{Tab}
+  $!+[::Send ^+{Tab}
+  $!+]::Send ^{Tab}
 #if
+
+; --------------------Vscode其他特殊映射---------------------------
+#If WinActive("ahk_exe " "Code.exe")
+  ; ctrl p 映射
+  ~!p::Send ^{p}
+  ; ctrl shift f 映射
+  ~!+f::Send ^+{f}
+#if
+
+
+; ---------------------全局Windows terminal---------------------
+; ~Ctrl::
+; ;400 is the maximum allowed delay (in milliseconds) between presses.
+; if (A_PriorHotKey = "~Ctrl" AND A_TimeSincePriorHotkey < 400)
+; {
+;    ;Put code to be executed here.
+;    Send #``
+; }
+; Return
 
 
 ; -------------通用快捷键映射（实现mac快捷键操作逻辑）---------------
@@ -88,6 +121,9 @@ Return
 !t::Send ^t
 
 !z::Send ^z
+
+!s::Send ^s
+
 
 ; ------------------快捷移动快捷键------------------------
 
